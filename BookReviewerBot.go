@@ -27,7 +27,7 @@ func main() {
 
 	discordSession := authDiscordAPI()
 
-	fmt.Print("Connected to google and discord!")
+	fmt.Print("Connected to google and discord! ")
 
 	handleCommands(discordSession)
 	//Allow to terminate application with CTRL+C(SIGINT)
@@ -41,6 +41,7 @@ func main() {
 }
 
 func loadConfig() {
+	fmt.Println("Loading config ")
 	if _, err := toml.DecodeFile("config.toml", &config); err != nil {
 		fmt.Println(err)
 		return
@@ -48,32 +49,34 @@ func loadConfig() {
 }
 
 func authGoogleBooksAPI() {
+	fmt.Println("Authenticating Google Books API. ")
 	var err error
 	bookService, err = books.NewService(ctx, option.WithAPIKey(config.Keys.GoogleToken))
 
 	if err != nil {
-		fmt.Println("Google doesn't want to authenticate us. Maybe something is wrong?")
+		fmt.Println("Google doesn't want to authenticate us. Maybe something is wrong? ")
 		return
 	}
 }
 
 func authDiscordAPI() (discordSession *discordgo.Session) {
+	fmt.Println("Authenticating discord. ")
 	discordSession, err := discordgo.New("Bot " + config.Keys.DiscordToken)
 
 	if err != nil {
-		fmt.Println("Yeah, it didn't work. Authentication at discord failed :/")
+		fmt.Println("Yeah, it didn't work. Authentication at discord failed :/ ")
 		return
 	}
 	err = discordSession.Open()
 	if err != nil {
-		fmt.Println("There was an error while trying to open a Discord connection.", err)
+		fmt.Println("There was an error while trying to open a Discord connection. ", err)
 		return
 	}
 	return discordSession
 }
 
 func handleCommands(discordSession *discordgo.Session) {
-	fmt.Println("Registering commands.")
+	fmt.Println("Registering commands. ")
 	router := dgc.Create(&dgc.Router{
 		Prefixes: []string{config.Command.Prefix},
 		Commands: []*dgc.Command{},
