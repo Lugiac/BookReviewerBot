@@ -1,0 +1,12 @@
+#This is the config file!
+
+[keys]
+discordtoken = "blahblah"
+googletoken = "blahblahblah"
+
+[command]
+prefix = "="
+commandName = "book"
+commandAliases = ["livro", "cdl", "bookreview"]
+embedPrice = "Preço"
+
