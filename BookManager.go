@@ -52,7 +52,7 @@ func createBookEmbed(bookName string) (bookReviewEmbed *discordgo.MessageEmbed) 
 	if bookPrice == "0" {
 		return &discordgo.MessageEmbed{
 			Author:      &discordgo.MessageEmbedAuthor{},
-			Color:       0xffffff, // Green
+			Color:       0xffffff, // Black
 			Description: bookDescription,
 			Thumbnail: &discordgo.MessageEmbedThumbnail{
 				URL: bookThumbnail,
@@ -64,7 +64,7 @@ func createBookEmbed(bookName string) (bookReviewEmbed *discordgo.MessageEmbed) 
 
 		return &discordgo.MessageEmbed{
 			Author:      &discordgo.MessageEmbedAuthor{},
-			Color:       0xffffff, // Green
+			Color:       0xffffff, // Black
 			Description: bookDescription,
 			Fields: []*discordgo.MessageEmbedField{
 				{
