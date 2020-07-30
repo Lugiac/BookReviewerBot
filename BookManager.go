@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 
-	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
 	"google.golang.org/api/books/v1"
 )
@@ -65,10 +64,4 @@ func createBookEmbed(bookName string) (bookReviewEmbed *discordgo.MessageEmbed) 
 		},
 		Title: bookTitle,
 	}
-}
-
-func bookCommandHandler(ctx *dgc.Ctx) {
-	book := ctx.Arguments.Raw()
-	ctx.Session.ChannelMessageDelete(ctx.Event.ChannelID, ctx.Event.ID)
-	ctx.RespondEmbed(createBookEmbed(book))
 }
