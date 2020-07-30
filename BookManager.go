@@ -20,7 +20,7 @@ func getBookPriceWithCurrencyCode(bookListPrice *books.VolumeSaleInfoListPrice) 
 		bookListPrice.CurrencyCode
 }
 
-func getBookInfos(bookName string) (Title string, Description string, Price string, Thumbnail string) {
+func getBookInfos(bookName string) (Title string, Description string, Price string, BuyLink string, Thumbnail string) {
 	bookSearchResults, err := bookService.Volumes.List().Q(bookName).Do()
 	bookVolume := bookSearchResults.Items[0]
 
@@ -32,8 +32,10 @@ func getBookInfos(bookName string) (Title string, Description string, Price stri
 	bookVolumeSaleInfo := bookVolume.SaleInfo
 
 	bookPrice := "0"
+	bookBuyURL := ""
 	if bookVolumeSaleInfo.ListPrice != nil {
 		bookPrice = getBookPriceWithCurrencyCode(bookVolumeSaleInfo.ListPrice)
+		bookBuyURL = bookVolumeSaleInfo.BuyLink
 	}
 
 	var bookThumbnail string
@@ -43,11 +45,11 @@ func getBookInfos(bookName string) (Title string, Description string, Price stri
 
 	bookDescription := adjustDescriptionSize(bookVolumeInfo.Description)
 
-	return bookVolumeInfo.Title, bookDescription, bookPrice, bookThumbnail
+	return bookVolumeInfo.Title, bookDescription, bookPrice, bookBuyURL, bookThumbnail
 }
 
 func createBookEmbed(bookName string) (bookReviewEmbed *discordgo.MessageEmbed) {
-	bookTitle, bookDescription, bookPrice, bookThumbnail := getBookInfos(bookName)
+	bookTitle, bookDescription, bookPrice, bookBuyURL, bookThumbnail := getBookInfos(bookName)
 
 	if bookPrice == "0" {
 		return &discordgo.MessageEmbed{
@@ -68,8 +70,8 @@ func createBookEmbed(bookName string) (bookReviewEmbed *discordgo.MessageEmbed) 
 			Description: bookDescription,
 			Fields: []*discordgo.MessageEmbedField{
 				{
-					Name:   config.Command.EmbedPrice, // I wish I could insert IFs inside this xD
-					Value:  bookPrice,
+					Name:   config.Command.EmbedPrice, // I wish I could insert IFs inside this.
+					Value:  "[" + bookPrice + "]" + "(" + bookBuyURL + ")",
 					Inline: true,
 				},
 			},
