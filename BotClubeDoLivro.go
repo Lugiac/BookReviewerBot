@@ -27,8 +27,6 @@ func main() {
 
 	discordSession := authDiscordAPI()
 
-	fmt.Print("Connected to google and discord! ")
-
 	handleCommands(discordSession)
 	//Allow to terminate application with CTRL+C(SIGINT)
 	defer func() {
@@ -43,7 +41,7 @@ func main() {
 func loadConfig() {
 	fmt.Println("Loading config ")
 	if _, err := toml.DecodeFile("config.toml", &config); err != nil {
-		fmt.Println(err)
+		fmt.Println("There was an error while trying to load config. ", err)
 		return
 	}
 }
@@ -54,17 +52,17 @@ func authGoogleBooksAPI() {
 	bookService, err = books.NewService(ctx, option.WithAPIKey(config.Keys.GoogleToken))
 
 	if err != nil {
-		fmt.Println("Google doesn't want to authenticate us. Maybe something is wrong? ")
+		fmt.Println("Google doesn't want to authenticate us. Maybe something is wrong? ", err)
 		return
 	}
 }
 
 func authDiscordAPI() (discordSession *discordgo.Session) {
-	fmt.Println("Authenticating discord. ")
+	fmt.Println("Authenticating Discord. ")
 	discordSession, err := discordgo.New("Bot " + config.Keys.DiscordToken)
 
 	if err != nil {
-		fmt.Println("Yeah, it didn't work. Authentication at discord failed :/ ")
+		fmt.Println("Yeah, it didn't work. Authentication at discord failed :/ ", err)
 		return
 	}
 	err = discordSession.Open()
