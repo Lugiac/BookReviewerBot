@@ -48,20 +48,35 @@ func getBookInfos(bookName string) (Title string, Description string, Price stri
 
 func createBookEmbed(bookName string) (bookReviewEmbed *discordgo.MessageEmbed) {
 	bookTitle, bookDescription, bookPrice, bookThumbnail := getBookInfos(bookName)
-	return &discordgo.MessageEmbed{
-		Author:      &discordgo.MessageEmbedAuthor{},
-		Color:       0x00ff00, // Green
-		Description: bookDescription,
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:   config.Command.EmbedPrice,
-				Value:  bookPrice,
-				Inline: true,
+
+	if bookPrice == "0" {
+		return &discordgo.MessageEmbed{
+			Author:      &discordgo.MessageEmbedAuthor{},
+			Color:       0xffffff, // Green
+			Description: bookDescription,
+			Thumbnail: &discordgo.MessageEmbedThumbnail{
+				URL: bookThumbnail,
 			},
-		},
-		Thumbnail: &discordgo.MessageEmbedThumbnail{
-			URL: bookThumbnail,
-		},
-		Title: bookTitle,
+			Title: bookTitle,
+		}
+
+	} else {
+
+		return &discordgo.MessageEmbed{
+			Author:      &discordgo.MessageEmbedAuthor{},
+			Color:       0xffffff, // Green
+			Description: bookDescription,
+			Fields: []*discordgo.MessageEmbedField{
+				{
+					Name:   config.Command.EmbedPrice, // I wish I could insert IFs inside this xD
+					Value:  bookPrice,
+					Inline: true,
+				},
+			},
+			Thumbnail: &discordgo.MessageEmbedThumbnail{
+				URL: bookThumbnail,
+			},
+			Title: bookTitle,
+		}
 	}
 }
